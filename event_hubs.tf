@@ -31,6 +31,10 @@ module "event_hub_namespace_auth_rules" {
   ]
 }
 
+output "event_hub_namespace_auth_rules" {
+  value = module.event_hub_namespace_auth_rules
+}
+
 module "event_hub_namespaces_diagnostics" {
   source   = "./modules/diagnostics"
   for_each = var.event_hub_namespaces
@@ -98,7 +102,10 @@ module "event_hubs" {
   storage_account_id = try(module.storage_accounts[each.value.storage_account_key].id, null)
   base_tags          = try(local.global_settings.inherit_tags, false) ? local.resource_groups[each.value.resource_group_key].tags : {}
   resource_group     = local.combined_objects_resource_groups[try(each.value.lz_key, local.client_config.landingzone_key)][try(each.value.resource_group_key, each.value.resource_group.key)]
+}
 
+output "event_hubs" {
+  value = module.event_hubs
 }
 
 module "event_hub_auth_rules" {
@@ -117,6 +124,10 @@ module "event_hub_auth_rules" {
     module.event_hub_namespaces,
     module.event_hubs
   ]
+}
+
+output "event_hub_auth_rules" {
+  value = module.event_hub_auth_rules
 }
 
 module "event_hub_consumer_groups" {

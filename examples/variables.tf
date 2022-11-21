@@ -18,7 +18,7 @@ variable "landingzone" {
 }
 
 variable "var_folder_path" {
-  default = {}
+  default = ""
 }
 
 variable "provider_azurerm_features_keyvault" {
@@ -148,6 +148,9 @@ variable "subscription_billing_role_assignments" {
   default = {}
 }
 variable "app_service_environments" {
+  default = {}
+}
+variable "app_service_environments_v3" {
   default = {}
 }
 variable "app_service_plans" {
@@ -387,6 +390,9 @@ variable "log_analytics" {
 variable "logic_app_workflow" {
   default = {}
 }
+variable "logic_app_standard" {
+  default = {}
+}
 variable "logic_app_integration_account" {
   default = {}
 }
@@ -455,6 +461,9 @@ variable "cosmos_dbs" {
 variable "dynamic_keyvault_secrets" {
   default = {}
 }
+variable "dynamic_keyvault_certificates" {
+  default = {}
+}
 variable "front_doors" {
   default = {}
 }
@@ -476,6 +485,15 @@ variable "event_hubs" {
   default = {}
 }
 variable "automations" {
+  default = {}
+}
+variable "automation_schedules" {
+  default = {}
+}
+variable "automation_runbooks" {
+  default = {}
+}
+variable "automation_log_analytics_links" {
   default = {}
 }
 
@@ -765,6 +783,10 @@ variable "active_directory_domain_service" {
 variable "active_directory_domain_service_replica_set" {
   default = {}
 }
+variable "mysql_flexible_server" {
+  default = {}
+}
+
 variable "signalr_services" {
   default = {}
 }
@@ -819,6 +841,9 @@ variable "api_management_group" {
 variable "api_management_subscription" {
   default = {}
 }
+variable "api_management_product" {
+  default = {}
+}
 variable "lb" {
   default = {}
 }
@@ -846,6 +871,26 @@ variable "lb_rule" {
 variable "network_interface_backend_address_pool_association" {
   default = {}
 }
+variable "digital_twins_instances" {
+  description = "Digital Twins Instances"
+  default     = {}
+}
+
+variable "digital_twins_endpoint_eventhubs" {
+  description = "Digital Twins Endpoints Eventhubs"
+  default     = {}
+}
+
+variable "digital_twins_endpoint_eventgrids" {
+  description = "Digital Twins Endpoints Eventgrid"
+  default     = {}
+}
+
+variable "digital_twins_endpoint_servicebuses" {
+  description = "Digital Twins Endpoints Service Bus"
+  default     = {}
+}
+
 variable "monitor_metric_alert" {
   default = {}
 }
@@ -853,6 +898,24 @@ variable "monitor_activity_log_alert" {
   default = {}
 }
 variable "log_analytics_storage_insights" {
+  default = {}
+}
+variable "eventgrid_domain" {
+  default = {}
+}
+variable "eventgrid_topic" {
+  default = {}
+}
+variable "eventgrid_event_subscription" {
+  default = {}
+}
+variable "eventgrid_domain_topic" {
+  default = {}
+}
+variable "relay_hybrid_connection" {
+  default = {}
+}
+variable "relay_namespace" {
   default = {}
 }
 variable "purview_accounts" {
@@ -925,5 +988,26 @@ variable "backup_vault_policies" {
   default = {}
 }
 variable "backup_vault_instances" {
+  default = {}
+}
+variable "traffic_manager_azure_endpoint" {
+  default = {}
+}
+variable "traffic_manager_external_endpoint" {
+  default = {}
+}
+variable "traffic_manager_nested_endpoint" {
+  default = {}
+}
+variable "traffic_manager_profile" {
+  default = {}
+}
+variable "resource_provider_registration" {
+  default = {}
+}
+variable "static_sites" {
+  default = {}
+}
+variable "aro_clusters" {
   default = {}
 }

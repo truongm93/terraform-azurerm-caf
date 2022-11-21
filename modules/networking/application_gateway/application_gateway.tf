@@ -31,10 +31,11 @@ resource "azurerm_application_gateway" "agw" {
   resource_group_name = var.resource_group_name
   location            = var.location
 
-  zones              = try(var.settings.zones, null)
-  enable_http2       = try(var.settings.enable_http2, true)
-  tags               = try(local.tags, null)
-  firewall_policy_id = can(var.settings.firewall_policy_id) || can(var.settings.waf_policy.key) == false ? try(var.settings.firewall_policy_id, null) : var.application_gateway_waf_policies[try(var.settings.waf_policy.lz_key, var.client_config.landingzone_key)][var.settings.waf_policy.key].id
+  zones                             = try(var.settings.zones, null)
+  enable_http2                      = try(var.settings.enable_http2, true)
+  tags                              = try(local.tags, null)
+  firewall_policy_id                = can(var.settings.firewall_policy_id) == true ? var.settings.firewall_policy_id : (can(var.settings.waf_policy.key) == true ? var.application_gateway_waf_policies[try(var.settings.waf_policy.lz_key, var.client_config.landingzone_key)][var.settings.waf_policy.key].id : null)
+  force_firewall_policy_association = can(var.settings.firewall_policy_id) == false && can(var.settings.waf_policy.key) == false ? false : true
 
   sku {
     name     = var.sku_name
@@ -47,14 +48,23 @@ resource "azurerm_application_gateway" "agw" {
     subnet_id = local.ip_configuration["gateway"].subnet_id
   }
 
-  dynamic "ssl_policy" {
-    for_each = try(var.settings.ssl_policy, null) == null ? [] : [1]
+  dynamic "ssl_profile" {
+    for_each = try(var.settings.ssl_profiles, {})
     content {
-      disabled_protocols   = try(var.settings.ssl_policy.disabled_protocols, null)
-      policy_type          = try(var.settings.ssl_policy.policy_type, null)
-      policy_name          = try(var.settings.ssl_policy.policy_name, null)
-      cipher_suites        = try(var.settings.ssl_policy.cipher_suites, null)
-      min_protocol_version = try(var.settings.ssl_policy.min_protocol_version, null)
+      name                             = ssl_profile.value.name
+      trusted_client_certificate_names = try(ssl_profile.trusted_client_certificate_names, null)
+      verify_client_cert_issuer_dn     = try(ssl_profile.verify_client_cert_issuer_dn, null)
+
+      dynamic "ssl_policy" {
+        for_each = try(ssl_profile.value.ssl_policy, null) == null ? [] : [1]
+        content {
+          disabled_protocols   = try(ssl_policy.value.disabled_protocols, null)
+          policy_type          = try(ssl_policy.value.policy_type, null)
+          policy_name          = try(ssl_policy.value.policy_name, null)
+          cipher_suites        = try(ssl_policy.value.cipher_suites, null)
+          min_protocol_version = try(ssl_policy.value.min_protocol_version, null)
+        }
+      }
     }
   }
 
